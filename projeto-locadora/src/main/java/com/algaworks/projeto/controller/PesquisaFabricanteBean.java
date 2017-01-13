@@ -1,6 +1,5 @@
 package com.algaworks.projeto.controller;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +11,7 @@ import javax.inject.Named;
 
 import com.algaworks.projeto.dao.FabricanteDAO;
 import com.algaworks.projeto.model.Fabricante;
+import com.algaworks.projeto.util.jsf.FacesUtil;
 
 @Named
 @ViewScoped
@@ -30,6 +30,12 @@ public class PesquisaFabricanteBean implements Serializable {
 		return fabricantes;
 	}
 	
+	public void excluir() {
+			fabricanteDAO.excluir(fabricanteSelecionado);
+			this.fabricantes.remove(fabricanteSelecionado);
+			FacesUtil.addInfoMessage("Fabricante " + fabricanteSelecionado.getNome() + " excluído com sucesso.");
+	
+	}
 
 	public Fabricante getFabricanteSelecionado() {
 		return fabricanteSelecionado;

@@ -19,11 +19,24 @@ public class FabricanteDAO implements Serializable {
 	@Inject
 	private EntityManager em;
 
+	public void salvar(Fabricante fabricante) {
+		em.merge(fabricante);
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Fabricante> buscarTodos() {
 
 		return em.createQuery("from Fabricante").getResultList();
 	}
 
+	@Transacional
+	public void excluir(Fabricante fabricanteSelecionado){
+			fabricanteSelecionado = porId(fabricanteSelecionado.getCodigo());
+			em.remove(fabricanteSelecionado);
+			em.flush();
+	}
 	
+	public Fabricante porId(Long codigo){
+		return em.find(Fabricante.class, codigo);
+	}
 }

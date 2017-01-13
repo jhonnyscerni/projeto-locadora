@@ -21,11 +21,27 @@ public class ModeloCarroDAO implements Serializable {
 	@Inject
 	private EntityManager manager;
 
-	
+	public ModeloCarro porId(Long codigo) {
+		return manager.find(ModeloCarro.class, codigo);
+	}
+
+	public void salvar(ModeloCarro modeloCarro) {
+		manager.merge(modeloCarro);
+	}
 
 	public List<ModeloCarro> buscarModelo() {
 		return manager.createQuery("from ModeloCarro", ModeloCarro.class).getResultList();
 	}
 
-	
+	@Transacional
+	public void excluir(ModeloCarro modeloCarro) throws NegocioException {
+		modeloCarro = porId(modeloCarro.getCodigo());
+
+		try {
+			manager.remove(modeloCarro);
+			manager.flush();
+		} catch (PersistenceException e) {
+			throw new NegocioException("Este modelo não pode ser excluido");
+		}
+	}
 }

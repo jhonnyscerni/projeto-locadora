@@ -7,14 +7,15 @@
 	xmlns:o="http://omnifaces.org/ui">
 	
 	<ui:define name="content">
-		<h1 class="aw-page-title">Pesquisa Modelo</h1>
+		<h1 class="aw-page-title">Pesquisa Modelo de Carro</h1>
 		
 		<h:form id="frmPesquisa">
 			<p:messages id="messages" autoUpdate="true" closable="true" />
 
 			<p:toolbar style="margin-top: 20px">
 				<p:toolbarGroup>
-					<p:commandButton value="Novo" id="botaoNovo" />
+					<p:commandButton value="Novo" id="botaoNovo"
+						action="/modeloCarro/CadastroModeloCarro.xhtml" />
 				</p:toolbarGroup>
 			</p:toolbar>
 
@@ -38,9 +39,32 @@
 				<p:column headerText="Categoria">
 					<h:outputText value="#{modeloCarro.categoria}" />
 				</p:column>
-			
+				
+				<p:column style="width: 100px; text-align: center">
+					<p:button outcome="CadastroModeloCarro" icon="ui-icon-pencil"
+						title="Editar">
+						<f:param name="modeloCarro" value="#{modeloCarro.codigo}" />
+					</p:button>
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						oncomplete="PF('confirmacaoExclusao').show()" process="@this"
+						update=":frmPesquisa:confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener
+							target="#{pesquisaModeloCarroBean.modeloCarroSelecionado}"
+							value="#{modeloCarro}" />
+					</p:commandButton>
+				</p:column>
 			</p:dataTable>
-			
+
+			<p:confirmDialog id="confirmacaoExclusaoDialog"
+				widgetVar="confirmacaoExclusao"
+				message="Tem certeza que deseja excluir o modelo #{pesquisaModeloCarroBean.modeloCarroSelecionado.descricao}?"
+				header="Exclusão de Modelo Carro" severity="alert">
+				<p:button value="Não"
+					onclick="PF('confirmacaoExclusaoPF').hide(); return false;" />
+				<p:commandButton value="Sim" update=":frmPesquisa:modelosTable"
+					onclick="PF('confirmacaoExclusao').hide()"
+					action="#{pesquisaModeloCarroBean.excluir}" />
+			</p:confirmDialog>
 		</h:form>
 	</ui:define>
 </ui:composition>

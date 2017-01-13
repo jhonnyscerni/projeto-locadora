@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/Layout.xhtml"
+	xmlns:o="http://omnifaces.org/ui">
+	
+	<ui:define name="content">
+		<h1 class="aw-page-title">Pesquisa Modelo</h1>
+		
+		<h:form id="frmPesquisa">
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:commandButton value="Novo" id="botaoNovo" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="modelosTable"
+				value="#{pesquisaModeloCarroBean.modelos}" var="modeloCarro"
+				style="margin-top: 20px"
+				emptyMessage="Nenhum modelo encontrado." rows="20"
+				paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+				<p:column headerText="Código"
+					style="text-align: center; width: 100px">
+					<h:outputText value="#{modeloCarro.codigo}" />
+				</p:column>
+				<p:column headerText="Descrição">
+					<h:outputText value="#{modeloCarro.descricao}" />
+				</p:column>
+				
+				<p:column headerText="Fabricante">
+					<h:outputText value="#{modeloCarro.fabricante.nome}" />
+				</p:column>
+				<p:column headerText="Categoria">
+					<h:outputText value="#{modeloCarro.categoria}" />
+				</p:column>
+			
+			</p:dataTable>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>

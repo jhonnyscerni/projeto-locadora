@@ -31,7 +31,6 @@ public class PesquisaAcessorioBean implements Serializable {
 	
 	@PostConstruct
 	public void init(){
-		this.acessorioSelecionado = new Acessorio();
 		this.acessorios = acessorioDAO.buscarTodosAcessorios();
 	}
 	

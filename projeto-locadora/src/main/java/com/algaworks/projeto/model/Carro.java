@@ -23,7 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@NamedQueries({ @NamedQuery(name = "Carro.buscarTodos", query = "select c from Carro c"),
+@NamedQueries({ @NamedQuery(name = "Carro.buscarTodos", query = "select c from Carro c inner join fetch c.modeloCarro"),
 		@NamedQuery(name = "Carro.buscarCarroComAcessorios", query = "select c "
 				+ "	from Carro c JOIN c.acessorios a " + " where c.codigo = :codigo") })
 @Table(name = "carro")
@@ -45,7 +45,7 @@ public class Carro {
 	@JoinTable(name = "carro_acessorio", joinColumns = @JoinColumn(name = "codigo_carro"), inverseJoinColumns = @JoinColumn(name = "codigo_acessorio"))
 	private List<Acessorio> acessorios;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "codigo_modelo")
 	private ModeloCarro modeloCarro;
 

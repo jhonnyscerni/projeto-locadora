@@ -14,7 +14,9 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
+import org.hibernate.query.criteria.internal.CriteriaSubqueryImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -22,6 +24,7 @@ import org.junit.Test;
 
 import com.algaworks.projeto.model.Aluguel;
 import com.algaworks.projeto.model.Carro;
+import com.algaworks.projeto.model.Carro_;
 import com.algaworks.projeto.model.ModeloCarro;
 
 public class ExemplosCriteria {
@@ -185,5 +188,44 @@ public class ExemplosCriteria {
 		
 		System.out.println("valor total : "+total);
 		
+	}
+	
+	@Test
+	public void carrosAcimaDaMedia(){
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		
+		CriteriaQuery<Carro> criteriaQuery = builder.createQuery(Carro.class);
+		Subquery<Double> subquery = criteriaQuery.subquery(Double.class);
+		
+		Root<Carro> c = criteriaQuery.from(Carro.class);
+		Root<Carro> csub = subquery.from(Carro.class);
+		
+		subquery.select(builder.avg(csub.<Double>get("valorDiaria")));		
+		criteriaQuery.select(c);
+		criteriaQuery.where(builder.greaterThanOrEqualTo(c.<Double>get("valorDiaria"), subquery));
+		
+		TypedQuery<Carro> query = manager.createQuery(criteriaQuery);
+		List<Carro> resultado = query.getResultList();
+		
+		for (Carro carro : resultado) {
+			System.out.println("carro : "+carro.getPlaca()+" - "+ carro.getValorDiaria());
+		}
+		
+	}
+	
+	@Test
+	public void metaModel(){
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Carro> criteriaQuery = builder.createQuery(Carro.class);
+		
+		Root<Carro> carro = criteriaQuery.from(Carro.class);
+		Join<Carro, ModeloCarro> modeloCarro = (Join) carro.fetch(Carro_.modeloCarro);
+		
+		TypedQuery<Carro> query = manager.createQuery(criteriaQuery);
+		List<Carro> carros = query.getResultList();
+		
+		for (Carro carro2 : carros) {
+			System.out.println("carros: "+ carro2.getPlaca()+" - "+carro2.getModeloCarro().getDescricao());
+		}
 	}
 }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,6 +22,8 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Cascade;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = "Carro.buscarTodos", query = "select c from Carro c inner join fetch c.modeloCarro"),
@@ -41,11 +44,12 @@ public class Carro {
 
 	private BigDecimal valorDiaria;
 
+	@Cascade(org.hibernate.annotations.CascadeType.REMOVE)
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "carro_acessorio", joinColumns = @JoinColumn(name = "codigo_carro"), inverseJoinColumns = @JoinColumn(name = "codigo_acessorio"))
 	private List<Acessorio> acessorios;
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.LAZY , cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "codigo_modelo")
 	private ModeloCarro modeloCarro;
 

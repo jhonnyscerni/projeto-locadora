@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -62,6 +64,10 @@ public class Carro {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataModificacao;
+	
+	@Lob
+	@Column(name="foto_carro")
+	private byte[] foto;
 
 	@PrePersist
 	@PreUpdate
@@ -176,6 +182,14 @@ public class Carro {
 
 	public void setDataModificacao(Date dataModificacao) {
 		this.dataModificacao = dataModificacao;
+	}
+
+	public byte[] getFoto() {
+		return foto;
+	}
+
+	public void setFoto(byte[] foto) {
+		this.foto = foto;
 	}
 
 }

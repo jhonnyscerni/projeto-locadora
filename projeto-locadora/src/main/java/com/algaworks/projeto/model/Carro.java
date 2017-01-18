@@ -23,7 +23,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Cascade;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = "Carro.buscarTodos", query = "select c from Carro c inner join fetch c.modeloCarro"),
@@ -53,6 +52,8 @@ public class Carro {
 	@JoinColumn(name = "codigo_modelo")
 	private ModeloCarro modeloCarro;
 
+	// Caso queira apagar os alugueis quando apagar o carro "cascade = CascadeType.REMOVE"
+	// Casa queira Apagar Alugueis que nao tenham PAI cascade = CascadeType.PERSIST , orphanRemoval = true
 	@OneToMany(mappedBy = "carro")
 	private List<Aluguel> alugueis;
 
